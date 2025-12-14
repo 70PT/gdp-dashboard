@@ -101,12 +101,15 @@ if page == "Model Studio":
             d = ImageDraw.Draw(bg_image)
             d.text((250,200), "Upload an Image", fill=(255,255,0))
 
-        # FIX: Pass PIL Image directly - streamlit-drawable-canvas handles conversion
+        # Convert PIL Image to numpy array for canvas
+        bg_image_array = np.array(bg_image)
+
+        # Canvas
         canvas_result = st_canvas(
             fill_color="rgba(255, 165, 0, 0.3)",  
             stroke_width=brush_size,
             stroke_color=stroke_color,
-            background_image=bg_image,  # Pass PIL Image directly
+            background_image=bg_image_array,  # Pass as numpy array
             update_streamlit=True,
             height=400,
             width=600,
@@ -116,7 +119,7 @@ if page == "Model Studio":
 
     with col3:
         st.subheader("Validation")
-        st.image(bg_image, caption="Live Prediction", use_container_width=True)
+        st.image(bg_image, caption="Live Prediction", width=None)
         
         st.metric("Model Confidence", "88%", "+12%")
         
@@ -223,7 +226,7 @@ elif page == "Marketplace":
         cols = st.columns(4)
         for i, model in enumerate(filtered_models):
             with cols[i % 4]:
-                st.image(model['img'], use_container_width=True) 
+                st.image(model['img'], width=None) 
                 st.subheader(model['name'])
                 st.caption(model['tags'])
                 st.write(model['stars'])
