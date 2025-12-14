@@ -5,8 +5,6 @@ from PIL import Image, ImageDraw
 from streamlit_drawable_canvas import st_canvas
 import matplotlib.pyplot as plt
 import time
-import base64
-from io import BytesIO
 
 # --- Page Configuration ---
 st.set_page_config(layout="wide", page_title="BioVision Analytics")
@@ -34,13 +32,6 @@ def mock_predict_image(image, brush_data):
     mask = np.zeros_like(img_array)
     mask[:, :, 0] = 100 
     return Image.fromarray(mask)
-
-def pil_to_base64(img):
-    """Convert PIL Image to base64 string"""
-    buffered = BytesIO()
-    img.save(buffered, format="PNG")
-    img_str = base64.b64encode(buffered.getvalue()).decode()
-    return f"data:image/png;base64,{img_str}"
 
 # --- Navigation ---
 st.sidebar.title("🧬 VolkCell Analytics")
@@ -103,24 +94,23 @@ if page == "Model Studio":
         st.subheader("Viewport")
         upload_img = st.file_uploader("Upload Training Image", type=["png", "jpg", "tif"])
         
-        # Always create a background image
+        # Prepare background image for display
         if upload_img:
             bg_image = Image.open(upload_img).resize((600, 400))
-            # Convert to base64 for canvas
-            bg_image_data = pil_to_base64(bg_image)
+            bg_for_canvas = bg_image
         else:
             bg_image = Image.new('RGB', (600, 400), color = (73, 109, 137))
             d = ImageDraw.Draw(bg_image)
             d.text((250,200), "Upload an Image", fill=(255,255,0))
-            bg_image_data = pil_to_base64(bg_image)
+            bg_for_canvas = bg_image
 
-        # Canvas - pass base64 encoded image
+        # Canvas - pass PIL Image or None
         canvas_result = st_canvas(
             fill_color="rgba(255, 165, 0, 0.3)",  
             stroke_width=brush_size,
             stroke_color=stroke_color,
-            background_color="#eee",
-            background_image=bg_image_data,  # Pass base64 string
+            background_color="#496D89" if not upload_img else "",
+            background_image=bg_for_canvas if bg_for_canvas else None,
             update_streamlit=True,
             height=400,
             width=600,
