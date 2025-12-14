@@ -109,8 +109,8 @@ if page == "Model Studio":
             fill_color="rgba(255, 165, 0, 0.3)",  
             stroke_width=brush_size,
             stroke_color=stroke_color,
-            background_color="#496D89" if not upload_img else "",
-            background_image=bg_for_canvas if bg_for_canvas else None,
+            background_color="" if upload_img else "#496D89",  # Empty string when image exists
+            background_image=Image.open(upload_img) if upload_img else None,
             update_streamlit=True,
             height=400,
             width=600,
