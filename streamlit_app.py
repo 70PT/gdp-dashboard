@@ -94,6 +94,7 @@ if page == "Model Studio":
         st.subheader("Viewport")
         upload_img = st.file_uploader("Upload Training Image", type=["png", "jpg", "tif"])
         
+        # Always create a background image
         if upload_img:
             bg_image = Image.open(upload_img).resize((600, 400))
         else:
@@ -101,15 +102,15 @@ if page == "Model Studio":
             d = ImageDraw.Draw(bg_image)
             d.text((250,200), "Upload an Image", fill=(255,255,0))
 
-        # Convert PIL Image to numpy array for canvas
+        # Convert to numpy array for canvas
         bg_image_array = np.array(bg_image)
 
-        # Canvas
+        # Canvas - always pass the background image
         canvas_result = st_canvas(
             fill_color="rgba(255, 165, 0, 0.3)",  
             stroke_width=brush_size,
             stroke_color=stroke_color,
-            background_image=bg_image_array,  # Pass as numpy array
+            background_image=Image.fromarray(bg_image_array),  # Convert back to PIL Image
             update_streamlit=True,
             height=400,
             width=600,
