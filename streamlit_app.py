@@ -102,15 +102,13 @@ if page == "Model Studio":
             d = ImageDraw.Draw(bg_image)
             d.text((250,200), "Upload an Image", fill=(255,255,0))
 
-        # Convert to numpy array for canvas
-        bg_image_array = np.array(bg_image)
-
-        # Canvas - always pass the background image
+        # Canvas - pass PIL Image directly
         canvas_result = st_canvas(
             fill_color="rgba(255, 165, 0, 0.3)",  
             stroke_width=brush_size,
             stroke_color=stroke_color,
-            background_image=Image.fromarray(bg_image_array),  # Convert back to PIL Image
+            background_color="#eee",  # Add background color as fallback
+            background_image=bg_image,  # Pass PIL Image directly
             update_streamlit=True,
             height=400,
             width=600,
