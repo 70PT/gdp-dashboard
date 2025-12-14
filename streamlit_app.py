@@ -120,7 +120,7 @@ if page == "Model Studio":
 
     with col3:
         st.subheader("Validation")
-        st.image(bg_image, caption="Live Prediction", width=None)
+        st.image(bg_image, caption="Live Prediction")
         
         st.metric("Model Confidence", "88%", "+12%")
         
@@ -227,7 +227,7 @@ elif page == "Marketplace":
         cols = st.columns(4)
         for i, model in enumerate(filtered_models):
             with cols[i % 4]:
-                st.image(model['img'], width=None) 
+                st.image(model['img']) 
                 st.subheader(model['name'])
                 st.caption(model['tags'])
                 st.write(model['stars'])
